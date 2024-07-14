@@ -58,3 +58,22 @@ header {
 .logout-btn:hover {
     cursor: pointer;
 }
+
+.functions {
+    display: flex;
+    width: 40%;
+    justify-content: left;
+    align-items: center;
+    height: 5rem;
+    padding-left: 2rem;
+    background-color: #F0F0F0;
+    margin-top: 1rem;
+    font-size: large;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.functions:hover {
+    cursor: pointer;
+    height: 5.5rem;
+    width: 50%;
+}
