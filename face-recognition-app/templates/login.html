@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class='title-login'>
+        <h1> Face Recognition System </h1>
+    </div>
+    <div class='ctr'>
+    <div class='container-centre'>
+        <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Sign In</h1>
+        
+        <form class='lgn' action="/validate" method="post" enctype="multipart/form-data">
+            <div>
+                <label class='login-text' for="username">Username:</label>
+                <input class='login-box' type="text" id="username" name="username" required>
+            </div>
+
+            <div>
+                <label class='login-text' for="password">Password:</label>
+                <input class='login-box' type="password" id="password" name="password" required>
+            </div>
+
+            <input class='login-button' type="submit" value="Login">
+        </form>
+    </div>
+</div>
+</body>
+</html>

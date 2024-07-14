@@ -1,0 +1,80 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+.ctr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;   
+    height:70% ;
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+
+
+.lgn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 4rem;
+}
+
+.login-text {
+    font-size: larger;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.login-box {
+    height: 2rem;
+    width: 16rem;
+    font-size: medium;
+    margin-left: 1rem;
+    border-radius: 4%;
+    background-color: white;
+    outline: 0;
+    padding-left: 0.5rem;
+}
+.login-box:focus {
+    outline: 1px solid black;
+}
+
+.login-button {
+    border-radius: 12%;
+    border: 1px solid black;
+    height: 2.3rem;
+    width: 5rem;
+    background-color: rgb(93, 93, 246);
+    color: white;
+    font-size: large;
+    margin-top: 2rem;
+}
+
+.login-button:hover {
+    cursor: pointer;
+    background-color: rgb(1, 1, 255);
+}
+
+.container-centre {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
+    border: 1px solid #ddd;
+    background-color: #FBFBFB;
+    gap: 20px;
+    padding: 2rem;
+    border-radius: 10%;
+}
+
+.title-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-top: 2rem;
+}
