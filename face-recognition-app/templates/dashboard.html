@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Recognition</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles2.css') }}">
-</head>
-<body>
-<header>
-    <div class='icon'>
+{% extends 'header.html' %}
+
+{% block content %}
+<div class='func-div'>
+    <div data-url='/add-new' onclick="divClicked(event)" class='functions'>
+        <p>Add An Employee</p>
     </div>
-    <div class='nav'>
-        <button class='btn' onclick="window.location.href = '/dashboard';"> Dashboard</button>
-        <button class='btn' onclick="window.location.href = '/attendance';">Attendance</button>
-    </div>
-    <div style='margin-right:2.5rem'>
-        <button class='logout-btn' style='font-size:medium' onclick="window.location.href = '/logout';">Log Out</button>
-    </div>  
-</header>
-<div>
-    <div class='functions'>
-        <h3>Add An Employee<h3>
-    </div>
-    <div class='functions'>
-        <h3>Edit/Remove an Employee</h3>
+    <div data-url='/edit' onclick="divClicked(event)" class='functions'>
+        <p>Edit/Remove an Employee</p>
     </div >
-    <div class='functions'>
-        <h3>Record Attendance</h3>
+    <div data-url='/record-attendance' onclick="divClicked(event)" class='functions'>
+        <p>Record Attendance</p>
     </div>
 </div>
-</body>
+<script>
+    function divClicked(event) {
+        const target = event.currentTarget;
+        const url = target.dataset.url;
+        window.location.href = url;
+    }
+</script>
+{% endblock %}

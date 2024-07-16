@@ -11,10 +11,10 @@
         <h1> Face Recognition System </h1>
     </div>
     <div class='ctr'>
-    <div class='container-centre'>
-        <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Sign In</h1>
+    <div class='container-centre-reg'>
+        <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Account Creation</h1>
         
-        <form class='lgn' action="/validate" method="post" enctype="multipart/form-data">
+        <form class='reg' action="/registration" method="post" enctype="multipart/form-data">
             <div>
                 <label class='login-text' for="username">Username:</label>
                 <input class='login-box' type="text" id="username" name="username" required>
@@ -24,8 +24,10 @@
                 <label class='login-text' for="password">Password:</label>
                 <input class='login-box' type="password" id="password" name="password" required>
             </div>
-            <p>If you have do not have an account, <a href='/register'>Register</a> here</p>
-            <input class='login-button' type="submit" value="Login">
+            <p><a href='/login'>Login</a> if you already have an account</p>
+            <div class='btn-centre'>
+            <input class='login-button' type="submit" value="Register">
+            </div>
         </form>
     </div>
 </div>

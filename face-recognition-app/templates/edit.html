@@ -1,0 +1,25 @@
+{% extends 'header.html' %}
+
+{% block content %}
+
+<div class='edit-main'>
+    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large"> List Of Employees </p>
+    <div class='search-form' >
+    <form action='/edit' method='GET' enctype="multipart/form-data">
+        <input type='text' name='search' id='search' required>
+        <input type='submit' value='Search'>
+    </form>
+</div>
+{% for emp in emps %}
+<div class='row'>
+    <p class='part'> {{emp.firstname}}</p>
+    <p class='part'> {{emp.lastname}}</p>
+    <img src="{{ url_for('uploaded_file', filename=emp.image_path) }}" style='max-width:80px' class='part' alt="Image" width="64" height="64" >
+    <div class='part btn-centre'>
+        <button onclick="window.location.href='/new_page?data=value'"> Edit </button>
+        <button> Delete </button>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

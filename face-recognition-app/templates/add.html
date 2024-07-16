@@ -1,0 +1,31 @@
+{% extends 'header.html' %}
+
+{% block content %}
+<div class='text-centre'>
+    <div class='add-main'>
+    <div>
+    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Add An Employee</p>
+    </div>
+    <div>
+    <form class='flex-centre' action='/add-new/add' method='post' enctype='multipart/form-data'>
+        <div >
+        <label class='login-text' for='firstname'> First Name: </label>
+        <input class='login-box' type='text' id='firstname' name='firstname' required>
+        </div>
+
+        <div>
+        <label class='login-text' for='lastname'> Last Name: </label>
+        <input class='login-box' type='text' id='lastname' name='lastname' required>
+        </div>
+
+        <div class='img'>
+            <label for='image'> Upload Image</label>
+            <input style='margin-left: 4rem;'type="file" name="image" id='image' required>
+        </div>
+        
+        <input class='login-button' type='submit' value='Add'>
+    </form>
+</div>
+</div>
+
+{% endblock %}
