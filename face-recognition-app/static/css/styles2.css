@@ -1,6 +1,8 @@
 body , html {
     margin: 0;
     padding: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .icon {
@@ -154,7 +156,7 @@ header {
 }
 
 .edit-main {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -171,6 +173,7 @@ header {
     border-radius: 3%;
     padding-left: 4rem;
     padding-right: 4rem;
+    font-size: large;
 }
 
 .part {
@@ -189,6 +192,15 @@ header {
     display: flex;
     width: 70%;
     justify-content: right;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+.delete-box {
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: absolute;
+    top: 40%;               /* Position at the vertical center */
+    left: 40%; 
 }

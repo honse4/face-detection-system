@@ -18,9 +18,18 @@ class Employee(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     firstname = Column(String,  nullable=False)
     lastname = Column(String, nullable=False)
-    image_path = Column(String, nullable=False)
+    image_path = Column(String,unique=True, nullable=False)
     controller_id = Column(Integer, ForeignKey('admins.id'))
     controller = relationship('User', back_populates='employees')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'controller_id': self.controller_id,
+            'image_path': self.image_path 
+        }
     
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -55,6 +64,13 @@ def get_user(db, username):
 
 def get_all_employees(db, ctr_id):
     return db.query(Employee).filter(Employee.controller_id == ctr_id).all()
+
+def delete_employee(db, id):
+    emp = db.query(Employee).filter(Employee.id == id).first()
+    db.delete(emp)
+    db.commit()
+    db.close()
+    return emp
 
 def get_employee(db, firstname, lastname, controller_id): 
     return db.query(Employee).filter(func.lower(Employee.firstname) == firstname.lower() and

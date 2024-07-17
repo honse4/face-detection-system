@@ -11,15 +11,31 @@
     </form>
 </div>
 {% for emp in emps %}
-<div class='row'>
-    <p class='part'> {{emp.firstname}}</p>
-    <p class='part'> {{emp.lastname}}</p>
-    <img src="{{ url_for('uploaded_file', filename=emp.image_path) }}" style='max-width:80px' class='part' alt="Image" width="64" height="64" >
+<div class='row' id="{{emp['id']}}">
+    <p class='part'> {{emp['firstname']}}</p>
+    <p class='part'> {{emp['lastname']}}</p>
+    <img src="{{ url_for('uploaded_file', filename=emp.image_path) }}" style='max-width:80px' class='part' alt="Image" width="64" height="50" >
     <div class='part btn-centre'>
         <button onclick="window.location.href='/new_page?data=value'"> Edit </button>
-        <button> Delete </button>
+        <button id='delete' onclick="deleteItem({{emp['id']}})"> Delete </button>
     </div>
 </div>
 {% endfor %}
 </div>
+
+<script>
+    function deleteItem(emp) {
+        const row = document.getElementById(emp)
+        row.remove()
+
+        fetch('/edit/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(emp)
+        });
+    }
+</script>
+
 {% endblock %}

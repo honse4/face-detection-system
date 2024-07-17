@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import os
 import uuid
-from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name
+from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee
 
 app = Flask(__name__)
 app.secret_key = 'test123'
@@ -137,10 +137,21 @@ def edit() :
         else:
             db_ = next(get_db())
             emps = get_all_employees(db_, session['id'])
+            emps_json = [emp.to_dict() for emp in emps]
          
-        return render_template('edit.html', emps=emps)
+        return render_template('edit.html', emps=emps_json)
     else:
         return redirect(url_for('login'))
+
+@app.route('/edit/delete', methods=['POST'])
+def delete():
+    emp_id = request.json
+    db_ = next(get_db())
+    emp = delete_employee(db_, emp_id)
+    if emp:
+        return jsonify(emp)
+    else:
+        return {"status": "error"}
     
     
     
