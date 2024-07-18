@@ -13,7 +13,7 @@
     <div class='ctr'>
     <div class='container-centre'>
         <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Sign In</h1>
-        
+
         <form class='lgn' action="/validate" method="post" enctype="multipart/form-data">
             <div>
                 <label class='login-text' for="username">Username:</label>
@@ -24,7 +24,18 @@
                 <label class='login-text' for="password">Password:</label>
                 <input class='login-box' type="password" id="password" name="password" required>
             </div>
+            <div class='messages'>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'error'%}
+                        <p style="color:red" class="{{ category }}">{{ message }}</p>
+                    {% endif%}
+                {% endfor %}
+        {% endif %}
+    {% endwith %}
             <p>If you have do not have an account, <a href='/register'>Register</a> here</p>
+            </div>
             <input class='login-button' type="submit" value="Login">
         </form>
     </div>

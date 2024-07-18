@@ -12,12 +12,12 @@
 </div>
 {% for emp in emps %}
 <div class='row' id="{{emp['id']}}">
-    <p class='part'> {{emp['firstname']}}</p>
-    <p class='part'> {{emp['lastname']}}</p>
+    <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{emp['firstname']}}</p>
+    <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{emp['lastname']}}</p>
     <img src="{{ url_for('uploaded_file', filename=emp.image_path) }}" style='max-width:80px' class='part' alt="Image" width="64" height="50" >
     <div class='part btn-centre'>
-        <button onclick="window.location.href='/new_page?data=value'"> Edit </button>
-        <button id='delete' onclick="deleteItem({{emp['id']}})"> Delete </button>
+        <button class='edit-btn' onclick="window.location.href='/edit/{{emp['id']}}'"> Edit </button>
+        <button class='delete-btn' id='delete' onclick="deleteItem({{emp['id']}})"> Delete </button>
     </div>
 </div>
 {% endfor %}

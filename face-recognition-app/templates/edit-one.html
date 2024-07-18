@@ -1,0 +1,32 @@
+{% extends 'header.html' %}
+
+{% block content %}
+
+<div class='text-centre'>
+    <div class='add-main'>
+    <div>
+    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Edit Employee Information</p>
+    </div>
+    <div>
+    <form id='form' class='flex-centre' action='/edit/info' method='post' enctype='multipart/form-data'>
+        <div >
+        <label class='login-text' for='firstname'> First Name: </label>
+        <input class='login-box' type='text' id='firstname' name='firstname' required value="{{emp.firstname}}">
+        </div>
+
+        <div>
+        <label class='login-text' for='lastname'> Last Name: </label>
+        <input class='login-box' type='text' id='lastname' name='lastname' required value="{{emp.lastname}}">
+        </div>
+        <p> If you want to keep the same image, don't upload any file </p>
+        <div id='img' class='img' style='margin-top: 0rem'>
+            <label for='image'> Upload Image</label>
+            <input style='margin-left: 4rem;'type="file" name="image" id='image'>
+        </div>
+        <input type="hidden" id="id" name="id" value="{{emp.id}}">
+        <input class='login-button' type='submit' value='Save'>
+    </form>
+</div>
+
+</div>
+{% endblock %}

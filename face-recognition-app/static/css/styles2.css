@@ -31,11 +31,19 @@ header {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+.home-title-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
 .btn {
     border: 0;
     background-color: transparent;
     font-size: larger;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Roboto variant0", Tofu;
     height: 60px;
     width: 50x;
 }
@@ -50,8 +58,8 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 40%;
+    border: 2px solid #ddd;
+    border-radius: 42%;
     background-color: white;
     width: 5.5rem;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -63,12 +71,11 @@ header {
 
 .functions {
     display: flex;
-    width: 40%;
+    width: 35%;
     justify-content: left;
     align-items: center;
-    height: 5rem;
+    height: 4.5rem;
     padding-left: 2rem;
-    background-color: rgb(255, 253, 253);
     margin-top: 1.5rem;
     font-family: 'inter, sans-serif';
     border: 1px solid #ddd;
@@ -90,7 +97,7 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    width: 70%;
     border: 2px solid #ddd;
     border-radius: 7%;
     padding-top: 1rem;
@@ -203,4 +210,38 @@ header {
     position: absolute;
     top: 40%;               /* Position at the vertical center */
     left: 40%; 
+}
+
+.employee-edit {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.edit-btn {
+    width: 4rem;
+    height: 2rem;
+    border-radius: 12%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.edit-btn:hover {
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+.delete-btn {
+    background-color: rgb(232, 4, 4); 
+    color: white;
+    width: 4rem;
+    height: 2rem;
+    border-radius: 12%;
+    font-family: 'Montserrat', sans-serif;
+}
+.delete-btn:hover {
+    cursor: pointer;
+    background-color: rgb(157, 15, 15);
 }
