@@ -22,6 +22,7 @@ class Employee(Base, UserMixin):
     lastname = Column(String, nullable=False)
     image_path = Column(String,unique=True, nullable=False)
     controller_id = Column(Integer, ForeignKey('admins.id'))
+    image_encoding = Column(String)
     controller = relationship('User', back_populates='employees')
     
     def to_dict(self):
@@ -55,8 +56,8 @@ def add_user(db, username, password):
     db.refresh(db_user)
     return db_user
 
-def add_employee(db, firstname, lastname,image_path, controller_id):
-    db_employee = Employee(firstname=firstname, lastname=lastname, image_path=image_path, controller_id=controller_id)
+def add_employee(db, firstname, lastname,image_path, image_encoding, controller_id):
+    db_employee = Employee(firstname=firstname, lastname=lastname, image_path=image_path, image_encoding=image_encoding, controller_id=controller_id)
     db.add(db_employee)
     db.commit()
     db.refresh(db_employee)

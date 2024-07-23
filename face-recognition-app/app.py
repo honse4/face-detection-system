@@ -2,8 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 import os
-import uuid
 from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee, get_user_by_id, get_employee_by_id, edit_employee_image,edit_employee_no_image
+from additional_functions import allowed_file, decode_face_encoding, encode_face_encoding, image_to_encoding, record_faces
+import numpy as np
+import zlib
+import json
 
 app = Flask(__name__)
 app.secret_key = 'test123'
@@ -12,16 +15,12 @@ login_manager.init_app(app)
 
 login_manager.login_view = 'login'
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-    
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -73,7 +72,7 @@ def registrate():
         
             user_ = get_user(db_, username)
             session['id'] = user_.id
-            login_user(user)        
+            login_user(user_)        
             return redirect(url_for('home'))        
         else:
             return redirect(url_for('register'))
@@ -122,9 +121,11 @@ def upload_file():
         
         firstname = request.form['firstname']
         lastname = request.form['lastname']
+        face_encoding_str = image_to_encoding(filename)
+        # If this is bad send a flash back to the page
         id = session['id']
         with get_db() as db_:
-            add_employee(db_, firstname, lastname, filename, id)
+            add_employee(db_, firstname, lastname, filename, face_encoding_str, id)
         
         print('File successfully uploaded')
         return redirect(url_for('add'))
@@ -196,8 +197,27 @@ def edit_one_handler():
 @app.route('/record-attendance')
 @login_required
 def record():
-    return render_template('record.html')
+    if request.args.get('rec'):
+        boolVal = True
+    else:
+        boolVal = False
+    return render_template('record.html', attStart = boolVal)
 
+@app.route('/attendance-done', methods=['POST'])
+@login_required
+def finish_attendance():
+    return redirect(url_for('record'))
+
+@app.route('/upload-frames', methods=['POST'])
+@login_required
+def upload_frames():
+    compressed_data = request.data
+    decompressed_data = zlib.decompress(compressed_data)
+    frames = json.loads(decompressed_data)
+        
+    for frame in frames:
+        print('Processing frame:', frame[:50]) 
+        
     
 if __name__ == '__main__':
     init_db()
