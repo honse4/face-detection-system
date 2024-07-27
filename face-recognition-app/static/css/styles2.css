@@ -59,7 +59,8 @@ header {
     justify-content: center;
     align-items: center;
     border: 2px solid #ddd;
-    border-radius: 42%;
+    border-radius: 25px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     background-color: white;
     width: 5.5rem;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -80,6 +81,7 @@ header {
     font-family: 'inter, sans-serif';
     border: 1px solid #ddd;
     font-size: x-large;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .functions:hover {
@@ -197,10 +199,10 @@ header {
 
 .search-form {
     display: flex;
-    width: 70%;
+    width: 80%;
     justify-content: right;
-    margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    margin-right: 5rem;
 }
 
 
@@ -239,17 +241,52 @@ header {
 }
 
 .video {
-    height: 30%;
-    width: 50%;
-    background-color: black;
+    height: 475px;
+    width: 635px;
+    border-radius: 2%;
 }
 
 .attendance-btn {
-    width: 8rem;
+    width: 8.5rem;
     height: 3.5rem;
+    font-size: medium;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-radius: 7%;
 }
 
 .attendance-btn:hover {
     cursor: pointer;
     background-color: #ddd;
+}
+
+.message {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 10%;
+}
+
+.video-div {
+    display: flex; 
+    flex-direction: row;
+    align-items:center;
+     background-color: black; 
+    border-radius: 2%; 
+    padding: 1px; 
+    padding-right: 1rem; 
+    gap: 1rem;
+}
+
+.searchbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    height: 1.5rem;
+    width: 250px;
+    padding-left: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 25px; /* Makes the ends rounded */
+    padding-right: 3px;
 }

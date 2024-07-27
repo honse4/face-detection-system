@@ -3,11 +3,11 @@ import face_recognition
 import json
 import cv2
 import base64
-from db import get_db, get_all_employees
+from db import get_db, get_all_employees, employee_present, get_employee_attendances
+from datetime import datetime
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-known_face_encodings = [] 
-known_face_names = [] 
+temp_storage = {}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -31,42 +31,47 @@ def image_to_encoding(filename):
 def fill_names(ctr_id):
     with get_db() as db_:
         emps = get_all_employees(db_, ctr_id)
-         
+           
+    info = {'encodings': [], 'names' :[], 'ids': []}     
+
     for emp in emps:
-        known_face_encodings.append(decode_face_encoding(emp.image_encoding))
-        known_face_names.append(emp.firstname)
+        info['encodings'].append(decode_face_encoding(emp.image_encoding)) 
+        info['ids'].append(emp.id)
+        info['names'].append(f'{emp.firstname} {emp.lastname}')
+    
+    temp_storage[ctr_id] = info
+    
 
-
-def record_faces(frames):   
-        
-    video_capture = cv2.VideoCapture(0)
-    if not video_capture.isOpened():
-        print("Error: Could not open camera.")
-
+def record_faces(frames, ctr_id): 
+    info = temp_storage[ctr_id]
+    known_face_encodings = info['encodings']
+    known_ids = info['ids']
+    known_names = info['names']
+    
     for frame_data in frames:
         img_data = base64.b64decode(frame_data.split(',')[1])
         np_img = np.frombuffer(img_data, dtype=np.uint8)
 
         frame = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
-        rgb_frame = frame[:, :, ::-1]
+        rgb_frame = np.ascontiguousarray(frame[:, :, ::-1])
     
         face_locations = face_recognition.face_locations(rgb_frame)
+        if not face_locations:
+            continue
+            
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
-    
+
         for face_encoding in face_encodings:
             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
         
-            name = "Unknown"
             if True in matches:
                 first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
-                print(name)
-        
-        cv2.imshow('Video', frame)
-    
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    video_capture.release()
-    cv2.destroyAllWindows()
-    
+                known_face_encodings.pop(first_match_index)
+                name = known_names.pop(first_match_index)
+                id = known_ids.pop(first_match_index)
+                with get_db() as db_:
+                    if datetime.now().date() in [att.timestamp.date() for att in get_employee_attendances(db_, id)]:
+                        continue
+                    employee_present(db_, id)    
+                return name
+                

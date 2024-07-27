@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, jsonify, flash, get_flashed_messages
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 import os
-from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee, get_user_by_id, get_employee_by_id, edit_employee_image,edit_employee_no_image
-from additional_functions import allowed_file, decode_face_encoding, encode_face_encoding, image_to_encoding, record_faces
-import numpy as np
+from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee, get_user_by_id, get_employee_by_id, edit_employee_image,edit_employee_no_image, get_employee_attendances
+from additional_functions import allowed_file, image_to_encoding, record_faces, fill_names
 import zlib
 import json
 
@@ -85,7 +84,13 @@ def home():
 @app.route('/attendance')
 @login_required
 def attendance():
-    return render_template('attendance.html')
+    with get_db() as db_:
+        emps = get_all_employees(db_, current_user.id)
+        atts = {}
+        for emp in emps:
+            atts[f'{emp.firstname} {emp.lastname}'] = len(get_employee_attendances(db_, emp.id))
+    print(atts)        
+    return render_template('attendance.html', atts = atts)
     
 @app.route('/logout')
 @login_required
@@ -197,16 +202,9 @@ def edit_one_handler():
 @app.route('/record-attendance')
 @login_required
 def record():
-    if request.args.get('rec'):
-        boolVal = True
-    else:
-        boolVal = False
-    return render_template('record.html', attStart = boolVal)
+    fill_names(current_user.id)
+    return render_template('record.html')
 
-@app.route('/attendance-done', methods=['POST'])
-@login_required
-def finish_attendance():
-    return redirect(url_for('record'))
 
 @app.route('/upload-frames', methods=['POST'])
 @login_required
@@ -215,8 +213,8 @@ def upload_frames():
     decompressed_data = zlib.decompress(compressed_data)
     frames = json.loads(decompressed_data)
         
-    for frame in frames:
-        print('Processing frame:', frame[:50]) 
+    results = record_faces(frames, current_user.id)
+    return jsonify(results)
         
     
 if __name__ == '__main__':

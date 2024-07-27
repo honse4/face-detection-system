@@ -1,35 +1,27 @@
 {% extends 'header.html' %}
 
 {% block content %}
-<div class='text-centre' style='flex-direction: column;'>
-<h2>Record Attendance</h2>
+<div class='text-centre' style='margin-top: 0rem;'>
+    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Employee Attendances </p>
 </div>
-{% if attStart == False%}
-<div  class='edit-main'>
-<div id='button-div' style='width:60%' class='edit-main'>
-    <p>Start the attendance for the day here. The day only counts once the "Stop Attendance" button is pressed
-        on the following screen. Once each button is pressed, the action cannot be undone.
-    </p>
-    <form action='/record-attendance' method='GET' enctype="multipart/form-data">
-        <input class='attendance-btn' type='submit' value='Start Attendance' name='rec' id='rec'>
-    </form>
-</div>
-</div>
-{% else %}
-    <div id='video-recording' class='edit-main'>
+<div id='video-recording' class='edit-main' style='flex-direction: row; width: 100%; position: relative;'>
+    <div style='left: 50px; position: absolute;'>
+        <select id="cameraSelect"></select>
+    </div>
+    <div class='video-div'>
     <video class='video' id="video" autoplay></video>
-    <div style='margin-top: 1rem'>
+    <div style='margin-top: 1rem; display: flex; flex-direction: column; gap: 1px;'>
         <button class='edit-btn' id="start">Start</button>
         <button class='delete-btn' id="stop" disabled>Stop</button>
     </div>
-    <div class='search-form'>
-        <form action='/attendance-done' method='POST' enctype="multipart/form-data">
-            <input class='attendance-btn' type='submit' value='End Attendance'>
-        </form>
-    </div>
-    </div>
-{% endif %}
-    <script src="{{ url_for('static', filename='js/record.js') }}"></script>
+</div>
+</div>
+
+<div id='message' class='employee-edit' style='margin-top: 0rem;'>
+</div>
+
+<script defer src="{{ url_for('static', filename='js/face-api.min.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/record.js') }}"></script>
 
 {% endblock %}
 

@@ -1,8 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, func, or_, and_
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, func, or_, and_, CheckConstraint, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask_login import UserMixin
 from contextlib import contextmanager
+from datetime import datetime
 
 DATABASE_URL = "sqlite:///admin.db"
 Base = declarative_base()
@@ -15,15 +16,16 @@ class User(Base, UserMixin):
     password = Column(String, index=True)
     employees = relationship('Employee', back_populates='controller')
 
-class Employee(Base, UserMixin):
+class Employee(Base):
     __tablename__ = 'employees'
     id = Column(Integer, primary_key=True, autoincrement=True)
     firstname = Column(String,  nullable=False)
     lastname = Column(String, nullable=False)
     image_path = Column(String,unique=True, nullable=False)
     controller_id = Column(Integer, ForeignKey('admins.id'))
-    image_encoding = Column(String)
+    image_encoding = Column(String, nullable=False)
     controller = relationship('User', back_populates='employees')
+    attendances = relationship('Attendance', backref='user', lazy=True)
     
     def to_dict(self):
         return {
@@ -33,10 +35,17 @@ class Employee(Base, UserMixin):
             'controller_id': self.controller_id,
             'image_path': self.image_path 
         }
+
+class Attendance(Base):
+    __tablename__ = 'attendance'
+
+    id = Column(Integer, primary_key=True, index=True)
+    timestamp = Column(DateTime, nullable=False)
+    employee_id = Column(Integer, ForeignKey('employees.id'), nullable=False)
     
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+    
 def init_db():
     Base.metadata.create_all(bind=engine)
 
@@ -112,7 +121,19 @@ def edit_employee_no_image(db, id, firstname, lastname):
         return "Success"
     else:
         return "Failure"
+    
+def add_day(db):
+    att = db.query(Attendance).first()
+    att.value = att.value + 1
+    db.commit()
+    return "Success"
 
+def employee_present(db, employee_id):
+    att = Attendance(timestamp = datetime.now(), employee_id=employee_id)
+    db.add(att)
+    db.commit()
+    db.refresh(att)
+    return att
 
-if __name__ == "__main__":
-    init_db()
+def get_employee_attendances(db, employee_id):
+    return db.query(Attendance).filter(Attendance.employee_id == employee_id).all()
