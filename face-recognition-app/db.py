@@ -101,12 +101,13 @@ def get_employee_one_name(db, name, controller_id):
                                      Employee.lastname.ilike( f'%{name.lower()}%') &
                                      Employee.controller_id == controller_id)).all()
     
-def edit_employee_image(db, id, firstname, lastname, image_path):
+def edit_employee_image(db, id, firstname, lastname, image_path, image_encoding):
     emp = db.query(Employee).filter(Employee.id == id).first()
     if emp:
         emp.firstname = firstname
         emp.lastname = lastname
         emp.image_path = image_path
+        emp.image_encoding = image_encoding
         db.commit()
         return "Success"
     else:

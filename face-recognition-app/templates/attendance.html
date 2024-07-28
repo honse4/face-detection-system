@@ -3,18 +3,22 @@
 {% block content %}
 <div class='edit-main'>
     <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Employee Attendances </p>
+    {% if atts %}
     <div class='search-form'>
         <div class='searchbar'>
-            <form action='/edit' style='display: flex; width:100%;' method='GET' enctype="multipart/form-data">
-            <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search' required>
-            <input type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' value='S'>
-        </form>
+            <form action='/attendance' style='display: flex; width:100%;' method='GET' enctype="multipart/form-data">
+                <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search'>
+                <input class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' value='S'>
+            </form>
+        </div>
     </div>
-</div>
+    {% endif %}
 {% for key, value in atts.items() %}
 <div class='row' >
     <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{key}}</p>
     <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{value}} </p>
 </div>
 {% endfor %}
+</div>
+    <script src="{{ url_for('static', filename='js/additional.js') }}"></script>
 {% endblock %}

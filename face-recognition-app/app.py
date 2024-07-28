@@ -74,6 +74,7 @@ def registrate():
             login_user(user_)        
             return redirect(url_for('home'))        
         else:
+            flash('Username already taken', 'error')
             return redirect(url_for('register'))
     
 @app.route('/')
@@ -84,13 +85,23 @@ def home():
 @app.route('/attendance')
 @login_required
 def attendance():
-    with get_db() as db_:
-        emps = get_all_employees(db_, current_user.id)
-        atts = {}
-        for emp in emps:
-            atts[f'{emp.firstname} {emp.lastname}'] = len(get_employee_attendances(db_, emp.id))
-    print(atts)        
-    return render_template('attendance.html', atts = atts)
+    if request.args.get('search'):
+        search_result = request.args.get('search')
+        name_list = search_result.split()
+        
+        with get_db() as db_:
+            if len(name_list) == 1:
+                emps = get_employee_one_name(db_, name_list[0], current_user.id)
+            else: 
+                emps = get_employee(db_, name_list[0], name_list[1], current_user.id)
+    else:
+        with get_db() as db_:
+            emps = get_all_employees(db_, current_user.id)
+            
+    atts = {}
+    for emp in emps:
+        atts[f'{emp.firstname} {emp.lastname}'] = len(get_employee_attendances(db_, emp.id))      
+    return render_template('attendance.html', atts = atts)    
     
 @app.route('/logout')
 @login_required
@@ -111,12 +122,12 @@ def add() :
 @login_required
 def upload_file():
     if 'image' not in request.files:
-        print("No image")
+        flash('No image uploaded', 'error')
         return redirect(url_for('add'))
     
     file = request.files['image']
     if file.filename == '':
-        print('No selected file')
+        flash('No selected file', 'error')
         return redirect(url_for('add'))
     
     if file and allowed_file(file.filename):
@@ -127,14 +138,17 @@ def upload_file():
         firstname = request.form['firstname']
         lastname = request.form['lastname']
         face_encoding_str = image_to_encoding(filename)
-        # If this is bad send a flash back to the page
-        id = session['id']
+        if not face_encoding_str:
+            flash('Invalid image', 'error')
+            return redirect(url_for('add'))
+        id = current_user.id
         with get_db() as db_:
             add_employee(db_, firstname, lastname, filename, face_encoding_str, id)
         
         print('File successfully uploaded')
         return redirect(url_for('add'))
-    print('invlid file type')
+    
+    flash('Invalid file type. Use jpeg, jpg or png', 'error')
     return redirect(url_for('add'))
 
 
@@ -189,13 +203,23 @@ def edit_one_handler():
     file = request.files['image']
     
     with get_db() as db_: 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            edit_employee_image(db_,id, firstname, lastname, filename)        
+        if file:
+            if allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                face_encoding_str = image_to_encoding(filename)
+                
+                if not face_encoding_str:
+                    flash('Invalid image', 'error')
+                    return redirect(url_for('edit_one', employee_id=id))
+                edit_employee_image(db_,id, firstname, lastname, filename)   
+            else:
+                flash('Invalid file type. Use jpeg, jpg or png', 'error')    
+                return redirect(url_for('edit_one', employee_id=id))    
         else:
             edit_employee_no_image(db_, id, firstname, lastname)
+    flash('Edit Saved', 'success') 
     return redirect(url_for('edit'))
        
     
