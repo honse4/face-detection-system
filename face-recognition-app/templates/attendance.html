@@ -6,19 +6,14 @@
     {% if atts %}
     <div class='search-form'>
         <div class='searchbar'>
-            <form action='/attendance' style='display: flex; width:100%;' method='GET' enctype="multipart/form-data">
                 <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search'>
-                <input class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' value='S'>
-            </form>
+                <input class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' id='search-button' value='S'>
         </div>
+        {% else %}
+        <p> No employees added yet </p>
+        {% endif %}
     </div>
-    {% endif %}
-{% for key, value in atts.items() %}
-<div class='row' >
-    <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{key}}</p>
-    <p class='part' style="font-family: 'Montserrat', sans-serif;"> {{value}} </p>
+    <div style='display:flex; flex-direction: column; width:80%; align-items: center;' id='data-target'></div>
 </div>
-{% endfor %}
-</div>
-    <script src="{{ url_for('static', filename='js/additional.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/attendance-data.js') }}"></script>
 {% endblock %}

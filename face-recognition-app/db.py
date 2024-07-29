@@ -85,6 +85,9 @@ def get_employee_by_id(db, id):
     return db.query(Employee).filter(Employee.id == id).first()
 
 def delete_employee(db, id):
+    att = db.query(Attendance).filter(Attendance.employee_id == id).all()
+    for item in att:
+        db.delete(item)
     emp = db.query(Employee).filter(Employee.id == id).first()
     db.delete(emp)
     db.commit()
