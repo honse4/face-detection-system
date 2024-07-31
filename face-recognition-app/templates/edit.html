@@ -2,29 +2,29 @@
 
 {% block content %}
 
-<div style='display: flex; flex-direction: column; height:100%; '>
-<div class='edit-main' style='flex-grow: 1'>
-    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large"> List Of Employees </p>
-    {% if emps%}
+<div style='display: flex; flex-direction: column; height:100%;'>
+<div class='edit-main' style='flex-grow: 1; margin-top:1rem;'>
+    <h1 class='h1-fonts'> List Of Employees </h1>
     <div class='search-form'>
         <div class='searchbar'>
-            <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search' required>
-            <button class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' id='search-button'> S</button>
+            <form action='/edit' method='GET' style='display:flex; width:100%;'>
+                <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search' required>
+                <button class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;'> S</button>
+            </form>
     </div>
-    {% else %}
-    <p> No employees added yet </p>
-    {% endif %}
 </div>
 
-<div style='display:flex; flex-direction: column; width:80%; align-items: center;' id='data-target'></div>
+<div class='edit-main' style='width:60%;' id='data-target'></div>
 
 </div>
-<div class='messages' style='height:7%; display: flex; justify-content: center'>
+<div class='messages'>
     {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
         {% for category, message in messages %}
             {% if category == 'success'%}
-                <p style="color:green" id='temp' class="{{ category }}">{{ message }}</p>
+            <div class=' message' id='temp'>
+                <p style=""  class="{{ category }}">{{ message }}</p>
+            </div>
             {% endif%}
         {% endfor %}
 {% endif %}

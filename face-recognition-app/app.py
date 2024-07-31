@@ -76,8 +76,13 @@ def registrate():
         else:
             flash('Username already taken', 'error')
             return redirect(url_for('register'))
-    
+        
 @app.route('/')
+@login_required
+def dash():
+    return redirect(url_for('home')) 
+    
+@app.route('/dashboard')
 @login_required
 def home():
     return render_template('dashboard.html')

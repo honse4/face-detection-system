@@ -62,7 +62,7 @@ def record_faces(frames, ctr_id):
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
         for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.5)
         
             if True in matches:
                 first_match_index = matches.index(True)

@@ -1,20 +1,22 @@
 {% extends 'header.html' %}
 
 {% block content %}
-<div class='func-div'>
+<div class='func-div' style='height: 100%'>
     <div class='home-title-text'>
-        <h2> Face Recognition System</h2>
-        <p> Keep track of your employees using this system, which uses a machine learning model to record attendance by employees who only need to look into a camera. </p>
-        <p> The model looks through the database and updates the records, where admins store their employees' images</p>
+        <h1 style='font-weight: 500;'> Face Recognition System</h1>
+        <p style='font-weight: 300; padding-left: 1rem; padding-right: 1rem;'> Keep track of your employees using this system, which uses a machine learning model to record attendance by employees who only need to look into a camera. </p>
+        <p style='font-weight: 300; padding: 1rem; padding-right: 1rem;'> The model looks through the database and updates the records, where admins store their employees' images</p>
     </div>
-    <div data-url='/add-new' onclick="divClicked(event)" class='functions'>
-        <p>Add An Employee</p>
-    </div>
-    <div data-url='/edit' onclick="divClicked(event)" class='functions'>
-        <p>Edit/Remove an Employee</p>
-    </div >
-    <div data-url='/record-attendance' onclick="divClicked(event)" class='functions'>
-        <p>Record Attendance</p>
+    <div style='display:flex;height: 40%; gap: 3px;  width:100%; justify-content: center'>
+        <div data-url='/add-new' onclick="divClicked(event)" class='functions'>
+            <p>Add An Employee</p>
+        </div>
+        <div data-url='/edit' onclick="divClicked(event)" class='functions'>
+            <p>Edit/Remove an Employee</p>
+        </div >
+        <div data-url='/record-attendance' onclick="divClicked(event)" class='functions'>
+            <p>Record Attendance</p>
+        </div>
     </div>
 </div>
 <script>

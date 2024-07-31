@@ -1,20 +1,25 @@
 {% extends 'header.html' %}
 
 {% block content %}
-<div class='text-centre' style='margin-top: 0rem;'>
-    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Employee Attendances </p>
-</div>
-<div id='video-recording' class='edit-main' style='flex-direction: row; width: 100%; position: relative;'>
-    <div style='left: 50px; position: absolute;'>
-        <select id="cameraSelect"></select>
+<div style='padding: 3rem; display:flex; justify-content:center; align-items: center; height:80%'>
+    <div class='record-main'>
+        <div id='video-recording' class='edit-main video-main'>
+            <div class="edit-main">
+                <h1 class='h1-fonts'>Record Attendance</h1>
+                <div class='centering' style='flex-direction: column'>
+                    <p style="font-family:'Montserrat', sans-serif;"> Choose Input </p>
+                    <select style='height: 2rem; border-radius: 5px'id="cameraSelect"></select>
+                </div>
+            </div>
+            <div class='video-div'>
+                <video class='video' id="video" autoplay></video>
+                <div style='margin-top: 1rem; display: flex; flex-direction: column; gap: 1px;'>
+                    <button class='edit-btn' id="start">Start</button>
+                    <button class='delete-btn' id="stop" disabled>Stop</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class='video-div'>
-    <video class='video' id="video" autoplay></video>
-    <div style='margin-top: 1rem; display: flex; flex-direction: column; gap: 1px;'>
-        <button class='edit-btn' id="start">Start</button>
-        <button class='delete-btn' id="stop" disabled>Stop</button>
-    </div>
-</div>
 </div>
 
 <div id='message' class='employee-edit' style='margin-top: 0rem;'>

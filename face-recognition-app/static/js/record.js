@@ -142,5 +142,5 @@ function displayMatch(name) {
 
     setTimeout(() => {
         messageDiv.removeChild(nametag);
-    }, 3000);
+    }, 5000);
 }

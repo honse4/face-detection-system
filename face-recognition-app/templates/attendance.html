@@ -1,19 +1,28 @@
 {% extends 'header.html' %}
 
 {% block content %}
-<div class='edit-main'>
-    <p style="font-family: 'Montserrat', sans-serif; font-size: xx-large">Employee Attendances </p>
-    {% if atts %}
-    <div class='search-form'>
+<div class='edit-main' style='height:90%'>
+    <h1 class='h1-fonts'>Employee Attendances </h1>
+    <div class='search-form' style='gap: 5%'>
+        <select style='width: 10%; border-radius: 5px;'>
+            <option>Month</option>
+            <option>Week</option>
+            <option>Year</option>
+            <option>All</option>
+        </select>
         <div class='searchbar'>
+            <form action='/attendance' method='GET' style='display:flex; width:100%;'>
                 <input type='text' style='border: 0; outline: none; flex-grow:1; border-radius: 25px;' name='search' id='search'>
-                <input class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' id='search-button' value='S'>
+                <input class='form-search-button' type='submit' style='border: 0; border-radius: 25px; height: 2rem; width: 2rem;flex:1;' value='S'>
+            </form>
         </div>
-        {% else %}
-        <p> No employees added yet </p>
-        {% endif %}
     </div>
-    <div style='display:flex; flex-direction: column; width:80%; align-items: center;' id='data-target'></div>
+    <div style='width:60%;' class='row'>
+        <p class='part' style='font-weight: 600'> Name </p>
+        <p class='part' style='font-weight: 600'> Present % </p>
+        <p class='part' style='font-weight: 600'> Total Attendance </p>
+    </div>
+    <div class='edit-main' style='width:60%;' id='data-target'></div>
 </div>
     <script src="{{ url_for('static', filename='js/attendance-data.js') }}"></script>
 {% endblock %}

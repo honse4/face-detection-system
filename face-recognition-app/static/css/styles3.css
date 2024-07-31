@@ -1,0 +1,153 @@
+.search-form {
+    display: flex;
+    width: 70%;
+    justify-content: right;
+    margin-bottom: 0.5rem;
+    margin-right: 5rem;
+}
+
+
+.employee-edit {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.edit-btn {
+    width: 4rem;
+    height: 2rem;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.edit-btn:hover {
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+.delete-btn {
+    background-color: rgb(232, 4, 4); 
+    color: white;
+    width: 4rem;
+    height: 2rem;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+.delete-btn:hover {
+    cursor: pointer;
+    background-color: rgb(157, 15, 15);
+}
+
+.video {
+    height: 100%;
+    width: 90%;
+    border-radius: 5px;
+}
+
+.attendance-btn {
+    width: 8.5rem;
+    height: 3.5rem;
+    font-size: medium;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-radius: 7%;
+}
+
+.attendance-btn:hover {
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+.message {
+    border: 2px solid #ddd;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #FBFBFB;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    background-color: black;
+    color: white;
+}
+
+.video-div {
+    display: flex; 
+    flex-direction: row;
+    align-items:center;
+     background-color: black; 
+    border-radius: 5px; 
+    padding-right: 1rem; 
+    gap: 1rem;
+    height: 100%;
+    width: 60%;
+}
+
+.searchbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    height: 1.5rem;
+    width: 250px;
+    padding-left: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 25px; 
+    padding-right: 3px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.form-search-button:hover {
+    cursor: pointer;
+}
+
+.img-size {
+    max-width:80px;
+    width:64px;
+    max-height:60px;
+}
+
+.messages {
+    height:7%;
+    display: flex; 
+    justify-content: center; 
+    padding-top: 1rem;
+}
+
+.record-main {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    width: 75%;
+    border-radius: 10px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.video-main {
+    display: flex;
+    flex-direction: row;
+    height: 85%;
+    width: 100%; 
+    position: relative;
+    justify-content: center;
+    gap: 5%;
+}
+
+.centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.h1-fonts {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
