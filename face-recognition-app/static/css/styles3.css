@@ -42,7 +42,8 @@
 }
 
 .video {
-    height: 100%;
+    max-height: 100%;
+    
     width: 90%;
     border-radius: 5px;
 }
@@ -65,7 +66,7 @@
     padding: 1rem;
     font-family: 'Montserrat', sans-serif;
     background-color: #FBFBFB;
-    border-radius: 10%;
+    border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,8 +83,8 @@
     border-radius: 5px; 
     padding-right: 1rem; 
     gap: 1rem;
-    height: 100%;
-    width: 60%;
+    height: 95%;
+    width: 54%;
 }
 
 .searchbar {

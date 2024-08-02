@@ -1,0 +1,21 @@
+{% extends 'header.html' %}
+
+{% block content %}
+<div class='centering' style='height:100%; align-items: center; flex-direction: column; justify-content: start;'>
+    <div style='display: flex; height:50%; width:75%; margin-top: 2rem;'>
+        <div style='width: 40%; height:100%;'>
+            <img width="100%" height="100%" src="{{url_for('uploaded_file', filename=emp.image_path)}}" />
+        </div>
+        <div class='centering' style='height: 100%; flex:1; font-family:"Roboto variant0", sans-serif; '>
+            <h1 style='font-size: xxx-large'>{{emp.firstname}} {{emp.lastname}}</h1>
+        </div>
+    </div>
+    <div class='centering' style='flex-direction: column; font-family:"Montserrat", sans-serif;'>
+        <h2> Last 10 Days</h2>
+        <div class='edit-main' id='data-target'>
+
+        </div>
+    </div>
+</div>
+<script src="{{url_for('static', filename='js/attendance-one.js')}}"></script>
+{% endblock %}

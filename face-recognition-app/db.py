@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, func, or_, and_, CheckConstraint, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, func, or_, and_, CheckConstraint, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask_login import UserMixin
@@ -40,8 +40,13 @@ class Attendance(Base):
     __tablename__ = 'attendance'
 
     id = Column(Integer, primary_key=True, index=True)
-    timestamp = Column(DateTime, nullable=False)
+    timestamp = Column(Date, nullable=False)
     employee_id = Column(Integer, ForeignKey('employees.id'), nullable=False)
+    
+class Dates(Base):
+    __tablename__ = 'dates'
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(Date, unique=True, nullable=False)
     
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -71,6 +76,15 @@ def add_employee(db, firstname, lastname,image_path, image_encoding, controller_
     db.commit()
     db.refresh(db_employee)
     return db_employee
+
+def add_date(db):
+    date = db.query(Dates).filter(Dates.date == datetime.now().date()).first()
+    if not date:
+        db_date = Dates(date = datetime.now().date())
+        db.add(db_date)
+        db.commit()
+        db.refresh(db_date)
+        return db_date
 
 def get_user(db, username):
     return db.query(User).filter(User.username == username).first()
@@ -133,11 +147,14 @@ def add_day(db):
     return "Success"
 
 def employee_present(db, employee_id):
-    att = Attendance(timestamp = datetime.now(), employee_id=employee_id)
+    att = Attendance(timestamp = datetime.now().date(), employee_id=employee_id)
     db.add(att)
     db.commit()
     db.refresh(att)
     return att
 
 def get_employee_attendances(db, employee_id):
-    return db.query(Attendance).filter(Attendance.employee_id == employee_id).all()
+    return db.query(Attendance.timestamp).filter(Attendance.employee_id == employee_id).all()
+
+def get_all_dates(db):
+    return db.query(Dates.date).all()

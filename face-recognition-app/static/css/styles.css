@@ -33,7 +33,7 @@ body, html {
     width: 16rem;
     font-size: medium;
     margin-left: 1rem;
-    border-radius: 4%;
+    border-radius: 5px;
     background-color: white;
     outline: 0;
     padding-left: 0.5rem;
@@ -44,7 +44,7 @@ body, html {
 }
 
 .login-button {
-    border-radius: 12%;
+    border-radius: 5px;
     border: 1px solid black;
     height: 2.3rem;
     width: 5rem;
@@ -68,8 +68,8 @@ body, html {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     gap: 20px;
     padding: 2rem;
-    border-radius: 10%;
-    width: 30%;
+    border-radius: 20px;
+    width: 35%;
 }
 
 .title-login {
@@ -99,7 +99,7 @@ body, html {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     gap: 12rem;
     padding: 2rem;
-    border-radius: 10%;
+    border-radius: 15px;
     padding-left: 3rem;
 }
 

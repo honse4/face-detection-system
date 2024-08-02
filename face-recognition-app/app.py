@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 import os
-from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee, get_user_by_id, get_employee_by_id, edit_employee_image,edit_employee_no_image, get_employee_attendances
-from additional_functions import allowed_file, image_to_encoding, record_faces, fill_names
+from db import get_db, add_user, add_employee, get_user, init_db, get_all_employees, get_employee, get_employee_one_name, delete_employee, get_user_by_id, get_employee_by_id, edit_employee_image,edit_employee_no_image, get_employee_attendances, get_all_dates
+from additional_functions import allowed_file, image_to_encoding, record_faces, fill_names, attendance_time
 import zlib
 import json
 
@@ -87,58 +87,65 @@ def dash():
 def home():
     return render_template('dashboard.html')
 
-@app.route('/employee-attendance-all')
+@app.route('/employee-attendance', methods=['POST'])
 @login_required
-def send_employee_attendance_all():
+def send_employee_attendance():
+    data = request.get_json()
+    search = data.get('search')
+    time = data.get('time')
+    
     with get_db() as db_:
-        emps = get_all_employees(db_, current_user.id)
-            
+        if search:
+            name_list = search.split()
+            if len(name_list) == 1:
+                emps = get_employee_one_name(db_, name_list[0], session['id'])
+            else: 
+                emps = get_employee(db_, name_list[0], name_list[1], session['id'])
+        else:
+            emps = get_all_employees(db_, current_user.id)
+             
         atts = []
         for emp in emps:
+            emp_attendances = get_employee_attendances(db_, emp.id)
             dict = {}
+            dict['id'] = emp.id
             dict['name'] = emp.firstname + ' ' + emp.lastname
-            dict['length'] = len(get_employee_attendances(db_, emp.id))   
+            info = attendance_time(emp_attendances, time)
+            dict['percent'] = info['percent']
+            dict['counter'] = info['counter'] 
             atts.append(dict)   
     return jsonify(atts)
 
-@app.route('/employee-attendance-search/<string:search>')
-@login_required
-def send_employee_attendance_search(search):
-    name_list = search.split()
-    with get_db() as db_:
-        if len(name_list) == 1:
-                emps = get_employee_one_name(db_, name_list[0], session['id'])
-        else: 
-                emps = get_employee(db_, name_list[0], name_list[1], session['id'])
-        atts = []
-        for emp in emps:
-            dict = {}
-            dict['name'] = emp.firstname + ' ' + emp.lastname
-            dict['length'] = len(get_employee_attendances(db_, emp.id))   
-            atts.append(dict) 
-    
-    return jsonify(atts)
 
 @app.route('/attendance')
 @login_required
-def attendance():
-    if request.args.get('search'):
-        search_result = request.args.get('search')
-        name_list = search_result.split()
+def attendance():     
+    return render_template('attendance.html')    
+
+@app.route('/attendance/<int:employee_id>')
+@login_required
+def attendance_one(employee_id):
+    with get_db() as db_:
+        emp = get_employee_by_id(db_, employee_id)
+        if emp and emp.controller_id == current_user.id:
+            return render_template('attendance-one.html', emp=emp)
+        else:
+            return redirect(url_for('attendance'))
+
+@app.route('/attendance/one-employee', methods=['POST'])
+@login_required
+def get_attendance_one():
+    data = request.get_json()
+    id = data.get('id')
+    dict = {}
+    with get_db() as db_:
+        atts = [date.strftime('%Y-%m-%d') for (date,) in get_employee_attendances(db_, id)[-10:]]
+        dates = [date.strftime('%Y-%m-%d') for (date,) in get_all_dates(db_)[-10:]]
+        dict['atts'] = atts
+        dict['dates'] = dates
+    
+    return jsonify(dict)
         
-        with get_db() as db_:
-            if len(name_list) == 1:
-                emps = get_employee_one_name(db_, name_list[0], current_user.id)
-            else: 
-                emps = get_employee(db_, name_list[0], name_list[1], current_user.id)
-    else:
-        with get_db() as db_:
-            emps = get_all_employees(db_, current_user.id)
-            
-    atts = {}
-    for emp in emps:
-        atts[f'{emp.firstname} {emp.lastname}'] = len(get_employee_attendances(db_, emp.id))      
-    return render_template('attendance.html', atts = atts)    
     
 @app.route('/logout')
 @login_required
@@ -213,22 +220,8 @@ def send_employee_data_search(search):
 
 @app.route('/edit')
 @login_required
-def edit() :
-    if request.args.get('search'):
-        search_result = request.args.get('search')
-        name_list = search_result.split()
-        
-        with get_db() as db_:
-            if len(name_list) == 1:
-                emps = get_employee_one_name(db_, name_list[0], session['id'])
-            else: 
-                emps = get_employee(db_, name_list[0], name_list[1], session['id'])
-    else:
-        with get_db() as db_:
-            emps = get_all_employees(db_, session['id'])
-            
-    emps_json = [emp.to_dict() for emp in emps]        
-    return render_template('edit.html', emps=emps_json)
+def edit() :       
+    return render_template('edit.html')
 
 @app.route('/edit/delete', methods=['POST'])
 @login_required
