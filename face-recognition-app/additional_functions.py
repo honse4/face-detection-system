@@ -61,8 +61,12 @@ def attendance_time(employee_attendances, time):
     for (employee_date, ) in employee_attendances:
         if employee_date in dates:
             counter+=1
+            
+    info = {}
+    info['counter'] = counter
+    info['total'] = len(dates)
     
-    return dict_with_values(counter, dates)
+    return info
         
     
 def is_date_in_current_month(date_to_check):
@@ -85,16 +89,6 @@ def is_date_in_current_year(date_to_check):
     current_year = now.year
     
     return date_to_check.year == current_year
-
-
-def dict_with_values(counter, dates):
-    info = {}
-    info['counter'] = counter
-    if len(dates)>0:
-        info['percent'] = (counter/len(dates))*100
-    else:
-        info['percent'] = 0
-    return info
     
 
 def record_faces(frames, ctr_id): 

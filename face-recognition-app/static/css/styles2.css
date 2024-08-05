@@ -182,8 +182,6 @@ header {
     border: 1px solid #ddd;
     width: 100%;
     border-radius: 5px;
-    padding-left: 4rem;
-    padding-right: 4rem;
     font-size: large;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
@@ -191,6 +189,8 @@ header {
 .part {
     flex: 1;
     font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
 .btn-centre {

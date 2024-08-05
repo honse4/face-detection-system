@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, jsonify, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, jsonify, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 import os
@@ -30,6 +30,14 @@ def load_user(user_id):
 @login_required
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+def delete_file(filename):
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+        return jsonify({"message": "File deleted successfully"}), 200
+    else:
+        return jsonify({"error": "File not found"}), 404
 
 @app.route('/login')
 def login():
@@ -87,15 +95,14 @@ def dash():
 def home():
     return render_template('dashboard.html')
 
-@app.route('/employee-attendance', methods=['POST'])
+@app.route('/employee-attendance')
 @login_required
 def send_employee_attendance():
-    data = request.get_json()
-    search = data.get('search')
-    time = data.get('time')
+    search = request.args.get('search', default=None)
+    time = request.args.get('time', default='Month')
     
     with get_db() as db_:
-        if search:
+        if search != "All":
             name_list = search.split()
             if len(name_list) == 1:
                 emps = get_employee_one_name(db_, name_list[0], session['id'])
@@ -110,11 +117,25 @@ def send_employee_attendance():
             dict = {}
             dict['id'] = emp.id
             dict['name'] = emp.firstname + ' ' + emp.lastname
-            info = attendance_time(emp_attendances, time)
-            dict['percent'] = info['percent']
-            dict['counter'] = info['counter'] 
+            dict.update(attendance_time(emp_attendances, time))
             atts.append(dict)   
     return jsonify(atts)
+
+
+@app.route('/attendance/one-employee/<int:id>')
+@login_required
+def get_attendance_one(id):
+    times = ["Week", "Month", "Year", "All"]
+    dict = {}
+    with get_db() as db_:
+        atts = get_employee_attendances(db_, id)
+        dict['atts'] = [date.strftime('%Y-%m-%d') for (date,) in atts[-10:]]
+        dict['dates'] = [date.strftime('%Y-%m-%d') for (date,) in get_all_dates(db_)[-10:]]
+        for time in times:
+            dict[time] = attendance_time(atts, time)
+        
+        
+    return jsonify(dict)
 
 
 @app.route('/attendance')
@@ -132,19 +153,7 @@ def attendance_one(employee_id):
         else:
             return redirect(url_for('attendance'))
 
-@app.route('/attendance/one-employee', methods=['POST'])
-@login_required
-def get_attendance_one():
-    data = request.get_json()
-    id = data.get('id')
-    dict = {}
-    with get_db() as db_:
-        atts = [date.strftime('%Y-%m-%d') for (date,) in get_employee_attendances(db_, id)[-10:]]
-        dates = [date.strftime('%Y-%m-%d') for (date,) in get_all_dates(db_)[-10:]]
-        dict['atts'] = atts
-        dict['dates'] = dates
-    
-    return jsonify(dict)
+
         
     
 @app.route('/logout')
@@ -174,46 +183,46 @@ def upload_file():
         flash('No selected file', 'error')
         return redirect(url_for('add'))
     
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file.filename): 
         filename = secure_filename(file.filename)
-        face_encoding_str = image_to_encoding(filename)
-        if not face_encoding_str:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if not os.path.isfile(file_path):
+            file.save(file_path)
+            face_encoding_str = image_to_encoding(filename)
+            if not face_encoding_str:
+                delete_file(filename)
+                flash('Invalid image', 'error')
+                return redirect(url_for('add'))
+              
+            firstname = request.form['firstname']
+            lastname = request.form['lastname']
+        
+            id = current_user.id
+            with get_db() as db_:
+                add_employee(db_, firstname, lastname, filename, face_encoding_str, id)
+        
+            flash('New Employee Added', 'success')
+            return redirect(url_for('add'))
+        else:
             flash('Invalid image', 'error')
             return redirect(url_for('add'))
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        
-        id = current_user.id
-        with get_db() as db_:
-            add_employee(db_, firstname, lastname, filename, face_encoding_str, id)
-        
-        flash('New Employee Added', 'success')
-        return redirect(url_for('add'))
     
     flash('Invalid file type. Use jpeg, jpg or png', 'error')
     return redirect(url_for('add'))
 
 
-@app.route('/employee-data-all')
+@app.route('/employee-info/<string:search>')
 @login_required
-def send_employee_data_all():
+def employee_info(search):
     with get_db() as db_:
-            emps = get_all_employees(db_, current_user.id)
-    
-    return jsonify([emp.to_dict() for emp in emps])
-
-@app.route('/employee-data-search/<string:search>')
-@login_required
-def send_employee_data_search(search):
-    name_list = search.split()
-    with get_db() as db_:
-        if len(name_list) == 1:
+        if search != "All":
+            name_list = search.split()
+            if len(name_list) == 1:
                 emps = get_employee_one_name(db_, name_list[0], session['id'])
-        else: 
+            else: 
                 emps = get_employee(db_, name_list[0], name_list[1], session['id'])
+        else:
+            emps = get_all_employees(db_, current_user.id)
     
     return jsonify([emp.to_dict() for emp in emps])
 
@@ -230,7 +239,8 @@ def delete():
     with get_db() as db_:
         emp = delete_employee(db_, emp_id)
         if emp:
-            return redirect(url_for('edit'))
+            delete_file(emp.image_path)
+            return {"status": "Success"}
         else:
             return {"status": "error"}
     
@@ -258,13 +268,22 @@ def edit_one_handler():
             if allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(file_path)
-                face_encoding_str = image_to_encoding(filename)
                 
-                if not face_encoding_str:
+                if not os.path.isfile(file_path):
+                    file.save(file_path)
+                    face_encoding_str = image_to_encoding(filename)                
+                    if not face_encoding_str:
+                        delete_file(filename)
+                        flash('Invalid image', 'error')
+                        return redirect(url_for('edit_one', employee_id=id))
+                
+                    emp = get_employee_by_id(db_, id)
+                    delete_file(emp.image_path)
+                
+                    edit_employee_image(db_,id, firstname, lastname, filename, face_encoding_str)   
+                else:
                     flash('Invalid image', 'error')
                     return redirect(url_for('edit_one', employee_id=id))
-                edit_employee_image(db_,id, firstname, lastname, filename)   
             else:
                 flash('Invalid file type. Use jpeg, jpg or png', 'error')    
                 return redirect(url_for('edit_one', employee_id=id))    

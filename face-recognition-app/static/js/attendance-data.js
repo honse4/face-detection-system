@@ -14,17 +14,11 @@ function fill_data(data) {
 }
 
 function getData(paramValue, time) {
-        fetch('/employee-attendance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                search: paramValue,
-                time: time
-            })
-        })
-        .then(response => response.json())
+    if (paramValue === null){
+        paramValue = "All"
+    }
+    fetch(`/employee-attendance?search=${paramValue}&time=${time}`)
+    .then(response => response.json())
         .then(data => {  
             fill_data(data)
         })
@@ -39,7 +33,8 @@ getData(paramValue, 'Month')
 
 function attendanceRows(item) {
     const itemDiv = document.createElement('div');
-                    itemDiv.classList.add('row')
+    itemDiv.classList.add('row')
+    itemDiv.classList.add('hoverer')
 
     itemDiv.addEventListener('click', function() {
         window.location.href = `/attendance/${item['id']}`
@@ -51,12 +46,10 @@ function attendanceRows(item) {
 
     const percent = document.createElement('p')
     percent.classList.add('part')
-    percent.style.paddingLeft = '10%';
-    percent.textContent = item['percent']
+    percent.textContent =  item['total']>0 ? ((item['counter']/item['total'])*100).toFixed(2) : 0
 
     const count = document.createElement('p')
     count.classList.add('part')
-    count.style.paddingLeft = '10%';
     count.textContent = item['counter']
 
     itemDiv.appendChild(nametag)

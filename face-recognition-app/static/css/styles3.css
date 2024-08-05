@@ -152,3 +152,34 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
 }
+
+.attendance-one-main {
+    height:100%;
+    align-items: center; 
+    flex-direction: column; 
+    justify-content: start;
+}
+
+.name-div {
+    height: 100%;
+    flex:1; 
+    font-family:"Roboto variant0", sans-serif;
+}
+
+.border {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.hoverer:hover {
+    cursor: pointer;
+    background-color: #dadada;
+}
+
+.summary {
+    width: 80%; padding: 2rem; margin-top: 1rem; box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); background-color: #f3f3f3;
+}
+
+.last-10 {
+    width: 40%; padding-left:2%; padding-right:2%; padding-bottom:1rem;background-color: white;
+}

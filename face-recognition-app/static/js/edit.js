@@ -15,25 +15,19 @@ function fill_data(data) {
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const paramValue = urlParams.get('search');
+let paramValue = urlParams.get('search');
 
-if (paramValue== null) {
-    fetch('/employee-data-all')
-            .then(response => response.json())
-            .then(data => {
-                emp_data = data;
-                fill_data(data);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-} else {
-    fetch(`/employee-data-search/${paramValue}`)
-        .then(response => response.json())
-        .then(data => {
-            emp_data = data;
-            fill_data(data);
-        })
-        .catch(error => console.error('Error fetching data:', error))
+
+if (paramValue === null){
+    paramValue = "All"
 }
+fetch(`/employee-info/${paramValue}`)
+.then(response => response.json())
+.then(data => {
+    emp_data = data;
+    fill_data(data);
+})
+.catch(error => console.error('Error fetching data:', error));
 
 
 function editRows(item) {

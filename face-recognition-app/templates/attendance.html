@@ -17,12 +17,14 @@
             </form>
         </div>
     </div>
-    <div id='label' style='width:60%;' class='row'>
-        <p class='part' style='font-weight: 600'> Name </p>
-        <p class='part' style='font-weight: 600'> Present % </p>
-        <p class='part' style='font-weight: 600'> Total Attendance </p>
+    <div class='edit-main' style='width:100%;'>
+        <div id='label' style='width:70%;' class='row'>
+            <p class='part' style='font-weight: 600'> Name </p>
+            <p class='part' style='font-weight: 600'> Present % </p>
+            <p class='part' style='font-weight: 600'> Total Present </p>
+        </div>
+        <div class='edit-main' style='width:70%;' id='data-target'></div>
     </div>
-    <div class='edit-main' style='width:60%;' id='data-target'></div>
 </div>
     <script src="{{ url_for('static', filename='js/attendance-data.js') }}"></script>
 {% endblock %}

@@ -15,6 +15,7 @@
         <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Sign In</h1>
 
         <form class='lgn' action="/validate" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div>
                 <label class='login-text' for="username">Username:</label>
                 <input class='login-box' type="text" id="username" name="username" required>
