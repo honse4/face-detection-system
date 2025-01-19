@@ -1,10 +1,7 @@
-This project aims to mix in elements of machine learning and web development while providing real-life solutions.
+<h1>Employee Attendance Tracking App</h1>
 
-With this app, an employer can keep track of each employees' attendance without having to manually mark it. The empolyer can enter all their employees in the database
-using their image and name, then use campera input to recognize and automatically mark any employee. The system will keep track of attendances for each employee annd store it 
-so that it can be viewed at any time.
+This project aims to integrate machine learning and web development to provide a real-life solution for tracking employee attendance. The app allows employers to keep track of each employee's attendance without manual intervention. Employers can enter their employees into the database using their image and name, and the system will automatically recognize and mark attendance using camera input. The system stores attendance records for each employee, which can be viewed at any time.
 
-The project uses flask for the backend, sqlalchemy for the database, face_recognition and cv2 for the actual processing and recognition of people. To avoid a major load on the backend, 
-the frames caught by the camera are sent in batches, and only the frames which have faces on them are used. This is done by having a small but effective js face recognition model, that can 
-recognise faces in an image. These images are then sent to the face_recognition python library, which is trained on the employees database, and it decides to mark an emplyee if they are recognised, 
-which it provides confirmation of.
+The app offers real-time facial recognition using a ResNet model, ensuring accurate and efficient identification of employees. Employee data is stored securely, and attendance statistics are readily available for review. The backend is built using Flask, while SQLAlchemy manages the database. OpenCV (cv2) is utilized for image processing and recognition, and a JavaScript face detection model pre-filters frames to optimize performance.
+
+The app captures frames in real time using a camera. A lightweight JavaScript face detection model pre-filters these frames, sending only those with detected faces to the backend. OpenCV (cv2) preprocesses the images and extracts features, which are then classified by the ResNet model to identify employees. Employee data is stored in a database managed by SQLAlchemy,
